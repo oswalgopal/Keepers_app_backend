@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan'); /** for logging the request into the terminal */
 const bodyParser = require('body-parser'); /** for parsing the data we imported body parser */
+const mongoose = require('mongoose'); /** require for the database */
 /**
  * importing all the routes
  */
@@ -9,7 +10,15 @@ const loginRoute = require('./api/routes/login');
 
 const app = express(); /**created an app of express */
 app.use(morgan('dev')); /** using morgan in our app */
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false })); /** using body parser with extended false means parse only simple data */
+
+/**
+ * connecting with our database
+ */
+mongoose.connect('mongodb://127.0.0.1:27017/Keepers_App', {
+    useNewUrlParser: true,
+});
 
 /**
  * enabling CORS
@@ -27,7 +36,7 @@ app.use((req, res, next) => {
 /** 
  * using login route and handling it with login Route
  */
-app.use('/login', loginRoute);
+app.use('/', loginRoute);
 
 /**
  * handling the invalid url error
