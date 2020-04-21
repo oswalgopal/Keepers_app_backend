@@ -4,14 +4,28 @@ const User = require('../models/user');
 const mongoose = require('mongoose');
 
 router.post('/login', (req, res) => {
-    console.log(req);
-    res.status(200).json({
-        message: 'user logged successfully'
-    })
-})
+    User.find({ email: req.body.email, password: req.body.password }).exec().then(response => {
+        console.log(response);
+        if (response.length > 0) {
+            res.status(200).json({
+                message: 'user logged successfully',
+                response: response[0],
+            });
+        } else {
+            res.status(404).json({
+                message: 'Invalid Id or Password',
+                response: null,
+            });
+        }
+    }).catch(error => {
+        console.log(error);
+        res.status(500).json({
+            message: error
+        });
+    });
+});
 
 router.post('/Register', (req, res) => {
-    console.log(req);
     const user = new User({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
@@ -23,7 +37,6 @@ router.post('/Register', (req, res) => {
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
         email: req.body.email,
-        password: req.body.password,
         mobile: req.body.mobile,
     };
     user.save().then(result => {
