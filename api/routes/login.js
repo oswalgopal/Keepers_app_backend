@@ -4,7 +4,7 @@ const User = require('../models/user');
 const mongoose = require('mongoose');
 
 router.post('/login', (req, res) => {
-    User.find({ email: req.body.email, password: req.body.password }).exec().then(response => {
+    User.find({ email: req.body.email, password: req.body.password }).select('_id name email mobile').exec().then(response => {
         console.log(response);
         if (response.length > 0) {
             res.status(200).json({
