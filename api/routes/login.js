@@ -3,12 +3,21 @@ const router = express.Router();
 const User = require('../models/user');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const checkAuth = require('../middleware/check-auth');
 
 router.post('/login', (req, res) => {
     User.find({ email: req.body.email}).select('_id name email mobile password').exec().then(response => {
         if (response.length > 0) {
             bcrypt.compare(req.body.password, response[0].password, (error, result) => {
                 if (result) {
+                    const token =  jwt.sign({
+                        email: response[0].email,
+                        user_id: response[0]._id
+                    },'oswalgopal_JWT_25052000',{
+                        expiresIn: '1h'
+                     })
+
                     res.status(200).json({
                         status: 200,
                         message: 'user logged successfully',
@@ -16,7 +25,8 @@ router.post('/login', (req, res) => {
                             id: response[0]._id,
                             name: response[0].name,
                             email: response[0].email,
-                            mobile: response[0].mobile
+                            mobile: response[0].mobile,
+                            token: token
                         }
                     });
                 } else {
@@ -83,5 +93,13 @@ router.post('/Register', (req, res) => {
             });
         }
     });
-});    
+});
+
+
+router.get('/user', checkAuth,  (req, res, next) => {
+    res.status(200).json({
+        message: 'success'
+    });
+});
+
 module.exports = router;
