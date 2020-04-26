@@ -13,7 +13,6 @@ exports.login_controller = (req, res) => {
                     },'oswalgopal_JWT_25052000',{
                         expiresIn: '1h'
                      })
-
                     res.status(200).json({
                         status: 200,
                         message: 'user logged successfully',

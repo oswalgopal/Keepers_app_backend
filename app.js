@@ -5,7 +5,8 @@ const mongoose = require('mongoose'); /** require for the database */
 /**
  * importing all the routes
  */
-const loginRoute = require('./api/routes/login');
+const loginRoute = require('./api/routes/unAuthRoutes/login');
+const noteRoute = require('./api/routes/authRoutes/note');
 
 
 const app = express(); /**created an app of express */
@@ -37,6 +38,11 @@ app.use((req, res, next) => {
  * using login route and handling it with login Route
  */
 app.use('/', loginRoute);
+
+/**
+ * using note routes handling the add update and delete note
+ */
+app.use('/V1/', noteRoute);
 
 /**
  * handling the invalid url error

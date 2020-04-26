@@ -1,0 +1,4 @@
+{
+    "JWT_SECRET_KEY": "Bro2511",
+    "DATABASE_URL": ""
+}
