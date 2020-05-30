@@ -1,4 +1,3 @@
-
 var mailer = require("nodemailer");
 var smtpTransport = mailer.createTransport({
     service: "gmail",
